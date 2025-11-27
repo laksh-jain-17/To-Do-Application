@@ -10,7 +10,7 @@
 				text-align:center;
 				padding:30px;
 			}
-			#click-action
+			#click-action,#done-action
 			{
 				background-color:black;
 				color:white;
@@ -25,7 +25,7 @@
 				height:40px;
 				width:280px;
 				padding:10px;
-				border-radius:20px;
+				border-radius:7px;
 			}
 			#box{
 				text-align:left;
@@ -39,6 +39,7 @@
 				box-sizing:border-box;
 				max-height:320px;
 				overflow-y:auto;
+				border:1px solid white;
 			}
 			ul{
 				margin:0;
@@ -53,6 +54,17 @@
 				gap:10px;
 				border-bottom:1px solid rgba(255,255,255,0.08);
 			}
+			#error{
+				display:none;
+			}
+			select{
+				margin-top:30px;
+				padding:10px;
+				border-radius:5px;
+				border:2px solid white;
+				color:white;
+				background-color:#7c1b44;
+			}
 		</style>
 	</head>
 	<body>
@@ -60,6 +72,7 @@
 			<h3>Hey Champ, Today it's <span>day </span>, add your important worklist here.</h3>
 			<input type="text" id="input-txt"> 
 			<button id="click-action">Add</button>
+			<button id="done-action">All done</button>
 			<p id="error">Error message</p>
 		</div>
 		<div id="intermediate">
@@ -67,12 +80,24 @@
 				<ul type="none">
 				</ul>
 			</div>
+			<select id="opt">Themes
+				<option>Beet and Grey</option>
+				<option>Dark Green and Black</option>
+				<option>Light Blue and Tan</option>
+				<option>White and Black</option>
+			</select>
 		</div>
 		<script src="D:\jQuery_Programs\jquery-3.7.1.js"></script>
 		<script>
 			$(document).ready(function(){
+				console.log("This is Version 2, uploaded on 28th November 2025");
 				console.log("All working");
-				$("#error").css("display","none");
+				$("#box").fadeOut(function(){
+					console.log("Box is hidden by default"); 
+				});
+				$("#box").fadeIn("slow",function(){
+					console.log("Box is shown automatically");
+				});
 				var date = new Date();
 				var output = date.getDay();
 				var weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -82,14 +107,13 @@
 					if(activity === "")
 					{
 						console.error("Field is empty.");
-						$("#error").text("Enter the activity");
+						$("#error").text("Enter the tasks");
 						$("#error").css("display","block");
 					}
 					else{
 						$("ul").append("<li><label><input type='checkbox' class='text-check'>" + $("<div>").text(activity).html() + "</label></li>");
 						console.log("Activity is added");
-						$("#input-txt").val("");
-						$("#input-txt").focus();		
+						$("#input-txt").val("").focus();		
 					}
 				});
 				$("ul").on("change",".text-check",function(){
@@ -98,6 +122,46 @@
 						$(this).closest("li").fadeOut(300,function(){ 
 							$(this).remove(); 
 						});
+					}
+				});
+				$("#done-action").click(function(){
+					$("#box ul").empty();
+					console.log("All tasks done in one-go successfully");
+				});
+				$("#opt").change(function(){
+					var text = $(this).val();
+					if(text === "Beet and Grey")
+					{
+						$("body").css("background-color","#7c1b44").css("color","white");
+						$("#box").css("background-color","grey").css("color","white");
+						$("#opt").css("background-color","#7c1b44").css("color","white");
+						console.log("Theme is default");
+					}
+					else if(text === "Dark Green and Black")
+					{
+						$("body").css("background-color","green");
+						$("#box").css("background-color","black");
+						$("#box").css("color","white");
+						$("#opt").css("background-color","green").css("color","white");
+						console.log("Theme is Dark Green and Black");
+					}
+					else if(text === "Light Blue and Tan")
+					{
+						$("body").css("background-color","blue");
+						$("#box").css("background-color","bisque");
+						$("#box").css("color","black");
+						$("#box").css("border","1px solid black");
+						$("#opt").css("background-color","blue").css("color","white");
+						console.log("Theme is Light Blue and Tan");
+					}
+					else if(text === "White and Black")
+					{
+						$("body").css("background-color","white");
+						$("body").css("color","black");
+						$("#box").css("background-color","black");
+						$("#box").css("color","white");
+						$("#opt").css("background-color","white").css("color","black").css("border","1px solid black");
+						console.log("Theme is White and Black");
 					}
 				});
 			});
